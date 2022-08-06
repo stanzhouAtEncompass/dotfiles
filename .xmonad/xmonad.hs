@@ -14,6 +14,7 @@ import XMonad.Actions.SpawnOn
 import XMonad.Util.EZConfig (additionalKeys, additionalMouseBindings)
 import XMonad.Actions.CycleWS
 import XMonad.Hooks.UrgencyHook
+import XMonad.Prompt.Pass
 import qualified Codec.Binary.UTF8.String as UTF8
 import qualified XMonad.Actions.DynamicWorkspaceOrder as DO
 
@@ -50,7 +51,7 @@ myModMask                     = mod4Mask
 mydefaults = def {
           normalBorderColor   = "#4c566a"
         , focusedBorderColor  = "#5e81ac"
-        , focusFollowsMouse   = True
+        , focusFollowsMouse   = False
         , mouseBindings       = myMouseBindings
         , workspaces          = myWorkspaces
         , keys                = myKeys
@@ -64,9 +65,11 @@ mydefaults = def {
 
 -- Autostart
 myStartupHook = do
-    spawn "$HOME/.screenlayout/standard.sh"
-    spawn "$HOME/.xmonad/scripts/autostart.sh"
     setWMName "LG3D"
+    spawn "$HOME/.screenlayout/standard.sh"
+    spawn "picom --config $HOME/.xmonad/scripts/picom.conf"
+    spawn "killall trayer"
+    spawn "caffeine"
     spawn "xscreensaver -no-splash"
     spawn "variety"
     spawn "volumeicon"
@@ -79,7 +82,9 @@ myStartupHook = do
     spawn "pasystray"
     spawn "redshift"
     spawn "compton -b"
-    spawn "clipit"
+    spawn "emacs --with-profile spacemacs --daemon &"
+    spawn "emacs --with-profile doom --daemon &"
+    spawn ("sleep 2 && trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor primary --transparent true --alpha 0 --height 35")
 
 encodeCChar = map fromIntegral . B.unpack
 
@@ -159,9 +164,13 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_d ), spawn $ "dmenu_run -i -nb '#191919' -nf '#fea63c' -sb '#fea63c' -sf '#191919' -fn 'NotoMonoRegular:bold:pixelsize=22'")
   , ((modMask, xK_f), sendMessage $ Toggle NBFULL)
   , ((modMask, xK_h), spawn $ "kitty 'htop task manager' -e htop" )
+  , ((modMask, xK_g), spawn $ "uget-gtk" )
+  , ((modMask, xK_i), spawn $ "imgur-screenshot" )
+  , ((modMask, xK_s), spawn $ "flameshot gui" )
+  , ((modMask, xK_l), spawn $ "libreoffice" )
   , ((modMask, xK_n), spawn $ "kitty -e newsboat" )
   , ((modMask, xK_m), spawn $ "rofi -show run" )
-  , ((modMask, xK_p), spawn $ "pm -t" )
+  , ((modMask, xK_p), spawn $ "rofi-pass" )
   , ((modMask, xK_q), kill )
   , ((modMask, xK_t), spawn $ "kitty" )
   , ((modMask, xK_v), spawn $ "pavucontrol" )
@@ -178,7 +187,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((modMask, xK_F7), spawn $ "virtualbox" )
   , ((modMask, xK_F8), spawn $ "thunar" )
   , ((modMask, xK_F9), spawn $ "evolution" )
-  , ((modMask, xK_F10), spawn $ "spotify" )
+  , ((modMask, xK_F10), spawn $ "spotify --force-device-scale-factor=2" )
   , ((modMask, xK_F11), spawn $ "rofi -theme-str 'window {width: 100%;height: 100%;}' -show drun" )
   , ((modMask, xK_F12), spawn $ "rofi -show drun" )
 
@@ -201,22 +210,23 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((controlMask .|. mod1Mask , xK_b ), spawn $ "thunar")
   , ((controlMask .|. mod1Mask , xK_c ), spawn $ "catfish")
   , ((controlMask .|. mod1Mask , xK_d ), spawn $ "emacsclient -nc -s doom")
-  , ((controlMask .|. mod1Mask , xK_e ), spawn $ "emacsclient -c -a 'emacs'")
- -- , ((controlMask .|. mod1Mask , xK_e ), spawn $ "emacsclient -nc -s 'spacemacs'")
+--  , ((controlMask .|. mod1Mask , xK_e ), spawn $ "emacsclient -c -a 'emacs'")
+  , ((controlMask .|. mod1Mask , xK_e ), spawn $ "emacsclient -nc -s 'spacemacs'")
   , ((controlMask .|. mod1Mask , xK_f ), spawn $ "firefox")
-  , ((controlMask .|. mod1Mask , xK_g ), spawn $ "chromium -no-default-browser-check")
+  , ((controlMask .|. mod1Mask , xK_j ), spawn $ "rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'")
+  , ((controlMask .|. mod1Mask , xK_g ), spawn $ "google-chrome-stable")
   , ((controlMask .|. mod1Mask , xK_i ), spawn $ "nitrogen")
   , ((controlMask .|. mod1Mask , xK_k ), spawn $ "arcolinux-logout")
   , ((controlMask .|. mod1Mask , xK_l ), spawn $ "betterlockscreen -l dim")
   , ((controlMask .|. mod1Mask , xK_m ), spawn $ "xfce4-settings-manager")
   , ((controlMask .|. mod1Mask , xK_o ), spawn $ "$HOME/.xmonad/scripts/picom-toggle.sh")
-  , ((controlMask .|. mod1Mask , xK_p ), spawn $ "pamac-manager")
+  , ((controlMask .|. mod1Mask , xK_p ), spawn $ "bash $HOME/.screenlayout/standard.sh")
   , ((controlMask .|. mod1Mask , xK_r ), spawn $ "rofi-theme-selector")
-  , ((controlMask .|. mod1Mask , xK_s ), spawn $ "spotify")
-  , ((controlMask .|. mod1Mask , xK_t ), spawn $ "urxvt")
+  , ((controlMask .|. mod1Mask , xK_s ), spawn $ "spotify --force-device-scale-factor=2")
+  , ((controlMask .|. mod1Mask , xK_t ), spawn $ "teams")
   , ((controlMask .|. mod1Mask , xK_u ), spawn $ "pavucontrol")
   , ((controlMask .|. mod1Mask , xK_v ), spawn $ "vivaldi-stable")
-  , ((controlMask .|. mod1Mask , xK_w ), spawn $ "arcolinux-welcome-app")
+  , ((controlMask .|. mod1Mask , xK_w ), spawn $ "bash $HOME/.screenlayout/work.sh")
   , ((controlMask .|. mod1Mask , xK_Return ), spawn $ "urxvt")
 
    
@@ -360,14 +370,8 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   --qwerty users use this line
    | (i, k) <- zip (XMonad.workspaces conf) [xK_1,xK_2,xK_3,xK_4,xK_5,xK_6,xK_7,xK_8,xK_9,xK_0]
 
-  --French Azerty users use this line
-  -- | (i, k) <- zip (XMonad.workspaces conf) [xK_ampersand, xK_eacute, xK_quotedbl, xK_apostrophe, xK_parenleft, xK_minus, xK_egrave, xK_underscore, xK_ccedilla , xK_agrave]
-
-  --Belgian Azerty users use this line
-  --   | (i, k) <- zip (XMonad.workspaces conf) [xK_ampersand, xK_eacute, xK_quotedbl, xK_apostrophe, xK_parenleft, xK_section, xK_egrave, xK_exclam, xK_ccedilla, xK_agrave]
-
-      , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)
-      , (\i -> W.greedyView i . W.shift i, shiftMask)]]
+      , (f, m) <- [(W.view, 0), (W.shift, shiftMask)
+      , (\i -> W.view i . W.shift i, shiftMask)]]
   ++
   -- SUPER-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
   -- SUPER-shift-{w,e,r}, Move client to screen 1, 2, or 3
@@ -405,11 +409,16 @@ main = do
         , ppSep = "  "
         , ppWsSep = "  "
         , ppLayout = (\ x -> case x of
-           "Spacing Tall"                 -> "<fn=1>Tall</fn>"
-           "Spacing Grid"                 -> "<fn=1>Grid</fn>"
-           "Spacing Spiral"               -> "<fn=1>Spiral</fn>"
-           "Spacing ThreeCol"             -> "<fn=1>ThreeColMid</fn>"
-           "Spacing Full"                 -> "<fn=1>Full</fn>"
+           -- "Spacing Tall"                 -> "<fn=1>Tall</fn>"
+           -- "Spacing Grid"                 -> "<fn=1>Grid</fn>"
+           -- "Spacing Spiral"               -> "<fn=1>Spiral</fn>"
+           -- "Spacing ThreeCol"             -> "<fn=1>ThreeColMid</fn>"
+           -- "Spacing Full"                 -> "<fn=1>Full</fn>"
+           "Spacing Tall"                 -> "Tall"
+           "Spacing Grid"                 -> "Grid"
+           "Spacing Spiral"               -> "Spiral"
+           "Spacing ThreeCol"             -> "ThreeColMid"
+           "Spacing Full"                 -> "Full"
            _                                         -> x )
  }
 }

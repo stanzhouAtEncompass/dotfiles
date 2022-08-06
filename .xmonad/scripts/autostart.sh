@@ -37,26 +37,26 @@ xsetroot -cursor_name left_ptr &
 #run variety &
 run nm-applet &
 #run trayer --edge top --align right --widthtype percent --height 28 --alpha 0 --transparent true --width 5 --tint 0x282c34 --monitor primary &
-run trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 5 --transparent true --tint 0x191970 --height 35 --monitor primary &
+#run trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 5 --transparent true --tint 0x191970 --height 35 --monitor primary &
 #run pamac-tray &
 #run xfce4-power-manager &
 #run volumeicon &
-run xfce4-clipman &
+#run clipman &
 #run flameshot &
 run fcitx-autostart &
 #run dropbox &
-run redshift &
+#run redshift &
 #run unclutter -idle 10 &
 #run ntfd &
 #numlockx on &
 #blueberry-tray &
-picom --config $HOME/.xmonad/scripts/picom.conf &
+#picom --config $HOME/.xmonad/scripts/picom.conf &
 #/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 #/usr/lib/xfce4/notifyd/xfce4-notifyd &
 
 #starting user applications at boot time
 #nitrogen --restore &
-run caffeine-ng &
+#run caffeine &
 #run vivaldi-stable &
 #run firefox &
 #run thunar &

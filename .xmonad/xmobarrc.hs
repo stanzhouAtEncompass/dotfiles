@@ -7,7 +7,8 @@ Config {
        , allDesktops = True
        , bgColor = "#282c34"
        , fgColor = "#bbc2cf"
-       , position = TopW L 95
+       --, position = TopW L 95
+       , position = TopSize L 100 24
        , commands = [ Run Cpu [ "--template", "<fc=#a9a1e1><fn=1></fn></fc> <total>%"
                               , "--Low","3"
                               , "--High","50"
@@ -22,7 +23,7 @@ Config {
                                  ,"-n","#bbc2cf"
                                  ,"-h","#fb4934"] 50
 
-                    , Run Date "<fc=#ECBE7B><fn=1></fn></fc> %a %b %_d %I:%M" "date" 300
+                    , Run Date "<fc=#ECBE7B><fn=1></fn></fc> %a %b %_d %H:%M" "date" 300
                     , Run DynNetwork ["-t","<fc=#4db5bd><fn=1></fn></fc> <rx>, <fc=#c678dd><fn=1></fn></fc> <tx>"
                                      ,"-H","200"
                                      ,"-L","10"
@@ -60,9 +61,11 @@ Config {
                     --                                , "-i"   , "<fc=#98be65>Charged</fc>"
                     --                      ] 50
                    , Run UVMeter "Sydney" ["-H", "3", "-L", "3", "--low", "green", "--high", "red"] 900
-                    , Run StdinReader
+                   --trayerpad
+                   , Run Com "/home/szhou/.config/xmobar/trayer-padding-icon.sh" [] "trayerpad" 20
+                    , Run UnsafeStdinReader
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %cpu% | %coretemp% | %memory% | %dynnetwork% | %date% | %YSSY% | UV: %uv Sydney%"   -- #69DFFA
+       , template = "%UnsafeStdinReader% }{ %cpu% | %coretemp% | %memory% | %dynnetwork% | %date% | %YSSY% | UV: %uv Sydney%| %trayerpad% "   -- #69DFFA
        }
